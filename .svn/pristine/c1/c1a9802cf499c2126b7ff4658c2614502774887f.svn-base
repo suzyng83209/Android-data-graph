@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "C:\\Users\\DanTimonera\\Desktop\\ECE 155\\Lab1_205_12\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_action_tombstone.xml",
+        "source": "C:\\Users\\DanTimonera\\.android\\build-cache\\3c6a0d0fab8f5d08d08e8fbb8d4e804df474bde5\\output\\res\\layout-v21\\notification_action_tombstone.xml"
+    },
+    {
+        "merged": "C:\\Users\\DanTimonera\\Desktop\\ECE 155\\Lab1_205_12\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_template_icon_group.xml",
+        "source": "C:\\Users\\DanTimonera\\.android\\build-cache\\3c6a0d0fab8f5d08d08e8fbb8d4e804df474bde5\\output\\res\\layout-v21\\notification_template_icon_group.xml"
+    },
+    {
+        "merged": "C:\\Users\\DanTimonera\\Desktop\\ECE 155\\Lab1_205_12\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_template_custom_big.xml",
+        "source": "C:\\Users\\DanTimonera\\.android\\build-cache\\3c6a0d0fab8f5d08d08e8fbb8d4e804df474bde5\\output\\res\\layout-v21\\notification_template_custom_big.xml"
+    },
+    {
+        "merged": "C:\\Users\\DanTimonera\\Desktop\\ECE 155\\Lab1_205_12\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_action.xml",
+        "source": "C:\\Users\\DanTimonera\\.android\\build-cache\\3c6a0d0fab8f5d08d08e8fbb8d4e804df474bde5\\output\\res\\layout-v21\\notification_action.xml"
+    }
+]
