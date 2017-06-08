@@ -122,6 +122,10 @@ public class Lab1_205_12 extends AppCompatActivity
         myLayout.addView(graph);
         graph.setVisibility(View.VISIBLE);
 
+        GestureFSM gestureX = new GestureFSM((float)0.5, (float)2, (float)-0.5, (float)-0.5, (float)-2, (float)3);
+        GestureFSM gestureY = new GestureFSM((float)1.5, (float)12, (float)9, (float)-1.5, (float)8, (float)11);
+        TextView gestureLabel = addTitleLabel(context, myLayout, "");
+
         // set up accelerometer data logging button and output file label
 
         Button logButton = addButton(context, myLayout, "Log Accelerometer Data to CSV");
@@ -136,6 +140,9 @@ public class Lab1_205_12 extends AppCompatActivity
                 LOG_FILE_NAME,
                 filePathLabel,
                 LOG_FILE_PATH_LABEL_FORMAT,
+                gestureX,
+                gestureY,
+                gestureLabel,
                 graph);
         logButton.setOnClickListener(sensorDataHandler);
     }

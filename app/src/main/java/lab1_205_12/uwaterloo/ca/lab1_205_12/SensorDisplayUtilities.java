@@ -1,6 +1,7 @@
 package lab1_205_12.uwaterloo.ca.lab1_205_12;
 
 import android.content.Context;
+import android.gesture.GestureUtils;
 import android.hardware.*;
 import android.view.ViewGroup;
 import android.widget.*;
@@ -124,6 +125,9 @@ public class SensorDisplayUtilities
                                                            String fileName,
                                                            TextView filePathLabel,
                                                            String labelFormat,
+                                                           GestureFSM gestureX,
+                                                           GestureFSM gestureY,
+                                                           TextView gestureLabel,
                                                            LineGraphView graph)
     {
         Sensor sensor = sensorManager.getDefaultSensor(sensorType);
@@ -135,6 +139,9 @@ public class SensorDisplayUtilities
                 fileName,
                 filePathLabel,
                 labelFormat,
+                gestureX,
+                gestureY,
+                gestureLabel,
                 graph);
         sensorManager.registerListener(sensorDataHandler, sensor, SensorManager.SENSOR_DELAY_GAME);
         return sensorDataHandler;

@@ -5,9 +5,15 @@ import android.util.*;
 import android.view.*;
 import android.widget.*;
 
+import org.w3c.dom.Text;
+
 import java.io.*;
 
 import ca.uwaterloo.sensortoy.LineGraphView;
+
+import static lab1_205_12.uwaterloo.ca.lab1_205_12.VectorType.TYPE_A;
+import static lab1_205_12.uwaterloo.ca.lab1_205_12.VectorType.TYPE_B;
+import static lab1_205_12.uwaterloo.ca.lab1_205_12.VectorType.TYPE_X;
 
 /**
  * Keeps a log of the most recent readings from a specified sensor.
@@ -44,6 +50,17 @@ public class SensorDataHandler implements SensorEventListener, View.OnClickListe
     private LineGraphView graph = null;
     private float[] filteredReadings;
 
+    // gesture components
+    private GestureFSM gestureX;
+    private GestureFSM gestureY;
+    private TextView gestureLabel;
+    private TextView debugX;
+    private TextView debugY;
+    private String LEFT = "LEFT";
+    private String RIGHT = "RIGHT";
+    private String UP = "UP";
+    private String DOWN = "DOWN";
+
     /**
      * Creates a SensorDataHandler that allows the logging and saving of data to
      * an Excel accessible CSV file.
@@ -65,6 +82,9 @@ public class SensorDataHandler implements SensorEventListener, View.OnClickListe
                              String fileName,
                              TextView filePathLabel,
                              String labelFormat,
+                             GestureFSM gestureX,
+                             GestureFSM gestureY,
+                             TextView gestureLabel,
                              LineGraphView graph)
     {
         DATA_POINTS = dataPoints;
@@ -82,10 +102,10 @@ public class SensorDataHandler implements SensorEventListener, View.OnClickListe
 
         this.graph = graph;
         filteredReadings = new float[COMPONENTS];
-    }
 
-    public float[][] getHistory() {
-        return this.history;
+        this.gestureLabel = gestureLabel;
+        this.gestureX = gestureX;
+        this.gestureY = gestureY;
     }
 
     public void onAccuracyChanged(Sensor s, int i){}
@@ -106,12 +126,31 @@ public class SensorDataHandler implements SensorEventListener, View.OnClickListe
             // necessary defensive copy as SensorEvent seems to store only one pointer; directly storing the
             // values pointer into the array will cause every element to point to the same data point
             for(int i = 0; i < COMPONENTS; i++) {
-                filteredReadings[i] += (se.values[i] - filteredReadings[i]) / 6;
+                filteredReadings[i] += (se.values[i] - filteredReadings[i]) / 9;
                 history[currentIndex][i] = filteredReadings[i];
             }
 
             //adding graph points and filtering
             if (graph != null) graph.addPoint(filteredReadings);
+
+            gestureX.analyze(filteredReadings[0]);
+            gestureY.analyze(filteredReadings[1]);
+
+            if (gestureX.getCurrentState() == VectorState.DETERMINED ||
+                    gestureY.getCurrentState() == VectorState.DETERMINED) {
+                VectorType xDir = gestureX.getType();
+                VectorType yDir = gestureY.getType();
+
+                if (xDir == TYPE_B && yDir == TYPE_X) {
+                    gestureLabel.setText(LEFT);
+                } else if (xDir == TYPE_A && yDir == TYPE_X) {
+                    gestureLabel.setText(RIGHT);
+                } else if (xDir == TYPE_X && yDir == TYPE_A) {
+                    gestureLabel.setText(UP);
+                } else if (xDir == TYPE_X && yDir == TYPE_B) {
+                    gestureLabel.setText(DOWN);
+                }
+            }
 
             timeStamps[currentIndex] = se.timestamp;
 
