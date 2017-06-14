@@ -1,7 +1,5 @@
 package lab1_205_12.uwaterloo.ca.lab1_205_12;
 
-import android.util.Log;
-
 import static lab1_205_12.uwaterloo.ca.lab1_205_12.VectorState.DETERMINED;
 import static lab1_205_12.uwaterloo.ca.lab1_205_12.VectorState.FALL_A;
 import static lab1_205_12.uwaterloo.ca.lab1_205_12.VectorState.FALL_B;

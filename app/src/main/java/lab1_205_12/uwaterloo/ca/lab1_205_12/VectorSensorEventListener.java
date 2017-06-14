@@ -21,16 +21,11 @@ public class VectorSensorEventListener extends AbstractSensorEventListener
     /**
      * Creates a sensor event listener specifically for displaying vector
      * sensor data onto a TextView.
-     *
-     * @param currentReading An optional TextView to display the current reading onto.
-     *                       Can be set to null.
-     * @param recordHigh An optional TextView to display the record high reading.
-     *                   Can be set to null.
      * @param sensorType The type of sensor to retrieve data from.
      */
-    public VectorSensorEventListener(TextView currentReading, TextView recordHigh, int sensorType)
+    public VectorSensorEventListener(int sensorType)
     {
-        super(currentReading, recordHigh, sensorType);
+        super(sensorType);
     }
 
     /**
