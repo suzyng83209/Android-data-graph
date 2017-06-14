@@ -1,4 +1,4 @@
-package lab1_205_12.uwaterloo.ca.lab1_205_12;
+package lab1_205_12.uwaterloo.ca.lab2_205_12;
 
 import android.hardware.*;
 import android.util.*;
@@ -9,9 +9,9 @@ import java.io.*;
 
 import ca.uwaterloo.sensortoy.LineGraphView;
 
-import static lab1_205_12.uwaterloo.ca.lab1_205_12.VectorType.TYPE_A;
-import static lab1_205_12.uwaterloo.ca.lab1_205_12.VectorType.TYPE_B;
-import static lab1_205_12.uwaterloo.ca.lab1_205_12.VectorType.TYPE_X;
+import static lab1_205_12.uwaterloo.ca.lab2_205_12.VectorType.TYPE_A;
+import static lab1_205_12.uwaterloo.ca.lab2_205_12.VectorType.TYPE_B;
+import static lab1_205_12.uwaterloo.ca.lab2_205_12.VectorType.TYPE_X;
 
 /**
  * Keeps a log of the most recent readings from a specified sensor.

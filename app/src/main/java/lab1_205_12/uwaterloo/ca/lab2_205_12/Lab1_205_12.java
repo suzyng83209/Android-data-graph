@@ -1,6 +1,5 @@
-package lab1_205_12.uwaterloo.ca.lab1_205_12;
+package lab1_205_12.uwaterloo.ca.lab2_205_12;
 
-import android.content.Context;
 import android.hardware.*;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,7 +11,7 @@ import java.util.Arrays;
 
 import ca.uwaterloo.sensortoy.LineGraphView;
 
-import static lab1_205_12.uwaterloo.ca.lab1_205_12.SensorDisplayUtilities.*;
+import static lab1_205_12.uwaterloo.ca.lab2_205_12.SensorDisplayUtilities.*;
 
 /**
  * A utility app for displaying sensor readings with record highs,

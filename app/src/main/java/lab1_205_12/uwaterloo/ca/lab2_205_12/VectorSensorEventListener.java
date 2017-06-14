@@ -1,7 +1,6 @@
-package lab1_205_12.uwaterloo.ca.lab1_205_12;
+package lab1_205_12.uwaterloo.ca.lab2_205_12;
 
 import android.hardware.*;
-import android.widget.*;
 
 /**
  * An implementation of AbstractSensorEventListener for retrieving and

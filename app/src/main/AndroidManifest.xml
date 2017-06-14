@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="lab1_205_12.uwaterloo.ca.lab1_205_12">
+    package="lab2_205_12.uwaterloo.ca.lab2_205_12">
 
     <application
         android:allowBackup="true"
@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Lab1_205_12">
+        <activity android:name="lab2_205_12.uwaterloo.ca.lab2_205_12.Lab1_205_12">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

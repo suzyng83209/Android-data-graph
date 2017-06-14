@@ -1,14 +1,14 @@
-package lab1_205_12.uwaterloo.ca.lab1_205_12;
+package lab1_205_12.uwaterloo.ca.lab2_205_12;
 
-import static lab1_205_12.uwaterloo.ca.lab1_205_12.VectorState.DETERMINED;
-import static lab1_205_12.uwaterloo.ca.lab1_205_12.VectorState.FALL_A;
-import static lab1_205_12.uwaterloo.ca.lab1_205_12.VectorState.FALL_B;
-import static lab1_205_12.uwaterloo.ca.lab1_205_12.VectorState.RISE_A;
-import static lab1_205_12.uwaterloo.ca.lab1_205_12.VectorState.RISE_B;
-import static lab1_205_12.uwaterloo.ca.lab1_205_12.VectorState.WAIT;
-import static lab1_205_12.uwaterloo.ca.lab1_205_12.VectorType.TYPE_A;
-import static lab1_205_12.uwaterloo.ca.lab1_205_12.VectorType.TYPE_B;
-import static lab1_205_12.uwaterloo.ca.lab1_205_12.VectorType.TYPE_X;
+import static lab1_205_12.uwaterloo.ca.lab2_205_12.VectorState.DETERMINED;
+import static lab1_205_12.uwaterloo.ca.lab2_205_12.VectorState.FALL_A;
+import static lab1_205_12.uwaterloo.ca.lab2_205_12.VectorState.FALL_B;
+import static lab1_205_12.uwaterloo.ca.lab2_205_12.VectorState.RISE_A;
+import static lab1_205_12.uwaterloo.ca.lab2_205_12.VectorState.RISE_B;
+import static lab1_205_12.uwaterloo.ca.lab2_205_12.VectorState.WAIT;
+import static lab1_205_12.uwaterloo.ca.lab2_205_12.VectorType.TYPE_A;
+import static lab1_205_12.uwaterloo.ca.lab2_205_12.VectorType.TYPE_B;
+import static lab1_205_12.uwaterloo.ca.lab2_205_12.VectorType.TYPE_X;
 
 /**
  * Created by Chuqian Li on 2017-06-06.

@@ -1,4 +1,4 @@
-package lab1_205_12.uwaterloo.ca.lab1_205_12;
+package lab1_205_12.uwaterloo.ca.lab2_205_12;
 
 /**
  * Created by Chuqian Li on 2017-06-07.
