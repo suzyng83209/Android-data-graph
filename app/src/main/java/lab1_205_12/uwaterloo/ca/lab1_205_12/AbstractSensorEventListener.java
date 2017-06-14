@@ -15,17 +15,10 @@ public abstract class AbstractSensorEventListener implements SensorEventListener
 
     /**
      * Creates a sensor event listener to listen to sensor data and display these onto TextViews.
-     *
-     * @param currentReading An optional TextView to display the current reading onto.
-     *                       Can be set to null.
-     * @param recordHigh An optional TextView to display the record high reading.
-     *                   Can be set to null.
      * @param sensorType The type of sensor to retrieve data from.
      */
-    public AbstractSensorEventListener(TextView currentReading, TextView recordHigh, int sensorType)
-    {
-        this.currentReading = currentReading;
-        this.recordHigh = recordHigh;
+    public AbstractSensorEventListener(int sensorType) {
+
         SENSOR_TYPE = sensorType;
     }
 

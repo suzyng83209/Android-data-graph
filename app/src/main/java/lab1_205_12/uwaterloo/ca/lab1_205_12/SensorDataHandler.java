@@ -5,8 +5,6 @@ import android.util.*;
 import android.view.*;
 import android.widget.*;
 
-import org.w3c.dom.Text;
-
 import java.io.*;
 
 import ca.uwaterloo.sensortoy.LineGraphView;
@@ -34,7 +32,6 @@ public class SensorDataHandler implements SensorEventListener, View.OnClickListe
     private boolean logging = false; // set to true when onClick() has initiated a file save operation
 
     // optional TextView providing formatted display of previous file path used
-    private TextView filePathLabel;
     private final String LABEL_FORMAT;
 
     // log data arrays; implement in place "scrolling"
@@ -54,8 +51,6 @@ public class SensorDataHandler implements SensorEventListener, View.OnClickListe
     private GestureFSM gestureX;
     private GestureFSM gestureY;
     private TextView gestureLabel;
-    private TextView debugX;
-    private TextView debugY;
     private String LEFT = "LEFT";
     private String RIGHT = "RIGHT";
     private String UP = "UP";
@@ -70,8 +65,6 @@ public class SensorDataHandler implements SensorEventListener, View.OnClickListe
      * @param sensorType The type of sensor to query data from.
      * @param filePath The full file path of the folder to store the data into.
      * @param fileName The name of the file to store the data into.
-     * @param filePathLabel A TextView for displaying the actual file path that the next reading will be stored in.
-     *                      This can be set to null if unneeded.
      * @param labelFormat The format with which to display the file path of the next reading.
      *                    This can be set to null if unneeded.
      */
@@ -80,7 +73,6 @@ public class SensorDataHandler implements SensorEventListener, View.OnClickListe
                              int sensorType,
                              String filePath,
                              String fileName,
-                             TextView filePathLabel,
                              String labelFormat,
                              GestureFSM gestureX,
                              GestureFSM gestureY,
@@ -94,7 +86,6 @@ public class SensorDataHandler implements SensorEventListener, View.OnClickListe
         FILE_PATH = filePath;
         FILE_NAME= fileName;
 
-        this.filePathLabel = filePathLabel;
         LABEL_FORMAT = labelFormat;
 
         history = new float[DATA_POINTS][COMPONENTS];
@@ -197,12 +188,6 @@ public class SensorDataHandler implements SensorEventListener, View.OnClickListe
             File file = new File(filePath);
 
             logCount++;
-
-            // display the file path into which the data log is to be stored
-            if(filePathLabel != null && LABEL_FORMAT != null)
-            {
-                filePathLabel.setText(String.format(LABEL_FORMAT, filePath));
-            }
 
             // save log data to CSV file
 
