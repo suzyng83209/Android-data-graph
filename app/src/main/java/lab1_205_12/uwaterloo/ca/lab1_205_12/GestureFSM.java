@@ -27,6 +27,15 @@ public class GestureFSM {
     private float threshold_B3;
     private int count = 0;
 
+    /**
+     *
+     * @param threshold_A1 - the first threshold for Type A
+     * @param threshold_A2 - the second threshold for Type A
+     * @param threshold_A3 - the third threshold for Type A
+     * @param threshold_B1 - the first threshold for Type B
+     * @param threshold_B2 - the second threshold for Type B
+     * @param threshold_B3 - the third threshold for Type B
+     */
     public GestureFSM(float threshold_A1,
                            float threshold_A2,
                            float threshold_A3,
@@ -41,6 +50,10 @@ public class GestureFSM {
         this.threshold_B3 = threshold_B3;
     }
 
+    /**
+     *
+     * @param currentReading - the current reading from the accelerometer (x, y, or z)
+     */
     public void analyze(float currentReading) {
         if (previousReading == null) previousReading = currentReading;
         Float dA = currentReading - previousReading;

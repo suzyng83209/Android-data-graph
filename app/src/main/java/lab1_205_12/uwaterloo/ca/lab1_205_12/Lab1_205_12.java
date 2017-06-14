@@ -59,10 +59,12 @@ public class Lab1_205_12 extends AppCompatActivity
         graph = new LineGraphView(getApplicationContext(), DATA_POINTS, Arrays.asList("x", "y", "z"), lineGraphWidth, lineGraphHeight, axisWidthPercentage);
         graph.setVisibility(View.VISIBLE);
 
-        GestureFSM gestureX = new GestureFSM((float)0.5, (float)2, (float)-0.5, (float)-0.5, (float)-2, (float)3);
-        GestureFSM gestureY = new GestureFSM((float)1.5, (float)12, (float)9, (float)-1.5, (float)8, (float)11);
+        GestureFSM gestureX = new GestureFSM((float)0.5, (float)1.5, (float)-0.5, (float)-0.5, (float)-1.5, (float)2);
+        GestureFSM gestureY = new GestureFSM((float)1, (float)11, (float)10, (float)-1, (float)9, (float)10);
 
         TextView gestureLabel = new TextView(getApplicationContext());
+
+
         gestureLabel.setTextSize(100);
         gestureLabel.setText(GESTURE_TITLE);
 
