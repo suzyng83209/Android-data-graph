@@ -26,16 +26,6 @@ public class VectorSensorEventListener extends AbstractSensorEventListener
     {
         super(sensorType);
     }
-
-    /**
-     * Resets all record historical high component readings to zero.
-     */
-    @Override
-    public void resetRecordHighReading()
-    {
-        for(int i = 0; i < 3; i++) recordHighReading[i] = 0;
-    }
-
     /**
      * Updates and displays the current and record historical high vector readings.
      *

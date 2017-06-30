@@ -25,7 +25,6 @@ public abstract class AbstractSensorEventListener implements SensorEventListener
     /**
      * Resets the record high reading to zero.
      */
-    public abstract void resetRecordHighReading();
 
     public void onAccuracyChanged(Sensor s, int i){}
 
