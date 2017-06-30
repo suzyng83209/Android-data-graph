@@ -39,37 +39,24 @@ public class SensorDisplayUtilities
      * @param dataPoints The maximum number of data points to store prior to scrolling.
      * @param components The number of components per data point.
      * @param sensorType The type of sensor to log data from.
-     * @param filePath The file path into which to store the data file.
-     * @param fileName The base file name to assign to each saved reading; appends an incrementing
-     *                 number to each file name of the format, "_%d".
-     * @param labelFormat The format with which to display the file path info onto the supplied
-     *                    TextView.
      * @return The newly created and registered sensor data logger.
      */
     public static SensorDataHandler createSensorDataLogger(SensorManager sensorManager,
                                                            int dataPoints,
                                                            int components,
                                                            int sensorType,
-                                                           String filePath,
-                                                           String fileName,
-                                                           String labelFormat,
                                                            GestureFSM gestureX,
                                                            GestureFSM gestureY,
-                                                           TextView gestureLabel,
-                                                           LineGraphView graph)
+                                                           TextView gestureLabel)
     {
         Sensor sensor = sensorManager.getDefaultSensor(sensorType);
         SensorDataHandler sensorDataHandler = new SensorDataHandler(
                 dataPoints,
                 components,
                 sensorType,
-                filePath,
-                fileName,
-                labelFormat,
                 gestureX,
                 gestureY,
-                gestureLabel,
-                graph);
+                gestureLabel);
         sensorManager.registerListener(sensorDataHandler, sensor, SensorManager.SENSOR_DELAY_GAME);
         return sensorDataHandler;
     }

@@ -16,23 +16,12 @@ import static lab1_205_12.uwaterloo.ca.lab1_205_12.VectorType.TYPE_X;
 /**
  * Keeps a log of the most recent readings from a specified sensor.
  */
-public class SensorDataHandler implements SensorEventListener, View.OnClickListener
-{
+public class SensorDataHandler implements SensorEventListener {
     // log data dimensions
     private final int DATA_POINTS;
     private final int COMPONENTS;
 
     private final int SENSOR_TYPE;
-
-    // log data storage location string constants
-    private final String FILE_PATH;
-    private final String FILE_NAME;
-
-    private int logCount = 0; // provides a count index for each reading file name; may replace with a date stamp
-    private boolean logging = false; // set to true when onClick() has initiated a file save operation
-
-    // optional TextView providing formatted display of previous file path used
-    private final String LABEL_FORMAT;
 
     // log data arrays; implement in place "scrolling"
     private float[][] history; // a scrolling list of DATA_POINTS data points of COMPONENTS size
@@ -51,10 +40,6 @@ public class SensorDataHandler implements SensorEventListener, View.OnClickListe
     private GestureFSM gestureX;
     private GestureFSM gestureY;
     private TextView gestureLabel;
-    private String LEFT = "LEFT";
-    private String RIGHT = "RIGHT";
-    private String UP = "UP";
-    private String DOWN = "DOWN";
 
     /**
      * Creates a SensorDataHandler that allows the logging and saving of data to
@@ -63,35 +48,21 @@ public class SensorDataHandler implements SensorEventListener, View.OnClickListe
      * @param dataPoints The number of data points to log.
      * @param components The number of components per data point.
      * @param sensorType The type of sensor to query data from.
-     * @param filePath The full file path of the folder to store the data into.
-     * @param fileName The name of the file to store the data into.
-     * @param labelFormat The format with which to display the file path of the next reading.
-     *                    This can be set to null if unneeded.
      */
     public SensorDataHandler(int dataPoints,
                              int components,
                              int sensorType,
-                             String filePath,
-                             String fileName,
-                             String labelFormat,
                              GestureFSM gestureX,
                              GestureFSM gestureY,
-                             TextView gestureLabel,
-                             LineGraphView graph)
+                             TextView gestureLabel)
     {
         DATA_POINTS = dataPoints;
         COMPONENTS = components;
         SENSOR_TYPE = sensorType;
 
-        FILE_PATH = filePath;
-        FILE_NAME= fileName;
-
-        LABEL_FORMAT = labelFormat;
-
         history = new float[DATA_POINTS][COMPONENTS];
         timeStamps = new float[DATA_POINTS];
 
-        this.graph = graph;
         filteredReadings = new float[COMPONENTS];
 
         this.gestureLabel = gestureLabel;
@@ -110,10 +81,13 @@ public class SensorDataHandler implements SensorEventListener, View.OnClickListe
      * @param se The SensorEvent from which the data point is to be obtained.
      */
     @Override
-    public void onSensorChanged(SensorEvent se)
-    {
-        if(se.sensor.getType() == SENSOR_TYPE)
-        {
+    public void onSensorChanged(SensorEvent se) {
+        if(se.sensor.getType() == SENSOR_TYPE) {
+            String LEFT = "LEFT";
+            String RIGHT = "RIGHT";
+            String UP = "UP";
+            String DOWN = "DOWN";
+
             // necessary defensive copy as SensorEvent seems to store only one pointer; directly storing the
             // values pointer into the array will cause every element to point to the same data point
             for(int i = 0; i < COMPONENTS; i++) {
@@ -168,57 +142,5 @@ public class SensorDataHandler implements SensorEventListener, View.OnClickListe
     private int wrap(int currentIndex, int maxIndex)
     {
         return (currentIndex >= maxIndex) ? 0 : (currentIndex + 1);
-    }
-
-    /**
-     * Saves the current data to an Excel readable CSV file.
-     *
-     * @param v See View.OnClickListener documentation.
-     */
-    @Override
-    public void onClick(View v)
-    {
-        // "!logging" to ensure only one thread initiates file IO at a time
-        if(!logging && history != null && timeStamps != null && FILE_PATH != null && FILE_NAME != null)
-        {
-            logging = true;
-
-            // construct the file path
-            String filePath = FILE_PATH + "/" + FILE_NAME + "_" + logCount + ".csv";
-            File file = new File(filePath);
-
-            logCount++;
-
-            // save log data to CSV file
-
-            PrintWriter outputStream = null;
-
-            try
-            {
-                outputStream = new PrintWriter(new FileWriter(file));
-
-                int maxIndex = DATA_POINTS - 1;
-
-                for(int i = 0, wrappingIndex = startIndex; i < DATA_POINTS; i++, wrappingIndex = wrap(wrappingIndex, maxIndex))
-                {
-                    outputStream.print(i + ", " + wrappingIndex + ", ");
-                    for(int j = 0; j < COMPONENTS; j++) outputStream.print(history[wrappingIndex][j] + ", ");
-                    outputStream.println(timeStamps[wrappingIndex]);
-                }
-
-                Log.d("SensorDataHandler", "Logged last " + DATA_POINTS + " readings to " + filePath + ".");
-            }
-            catch(IOException e)
-            {
-                Log.e("SensorDataHandler", "Error: There was an exception while creating the file.");
-                return;
-            }
-            finally
-            {
-                if(outputStream != null) outputStream.close();
-            }
-
-            logging = false;
-        }
     }
 }
