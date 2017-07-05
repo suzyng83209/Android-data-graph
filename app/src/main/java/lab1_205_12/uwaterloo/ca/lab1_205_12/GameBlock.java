@@ -19,8 +19,8 @@ public class GameBlock extends ImageView {
     private int targetY;
     private GameDirection myDirection = GameDirection.NO_MOVEMENT;
 
-    private boolean moving = false;
-    private int velocity = 3;
+    private int initialVelocity = 45;
+    private int velocity = initialVelocity;
     private int acceleration = 30;
 
     public GameBlock(Context myContext, int coordX, int coordY) {
@@ -38,10 +38,11 @@ public class GameBlock extends ImageView {
     }
 
     public void setBlockDirection(GameDirection newDirection) {
-        myDirection = newDirection;
+        this.myDirection = newDirection;
         int[] targetCoordinates = getTargetCoordinates();
         this.targetX = targetCoordinates[0];
         this.targetY = targetCoordinates[1];
+        this.velocity = initialVelocity;
     }
 
     public int[] getTargetCoordinates() {
@@ -64,18 +65,22 @@ public class GameBlock extends ImageView {
         switch(this.myDirection) {
             case LEFT:
                 if (myCoordX > targetX) myCoordX -= velocity;
+                else myCoordX = targetX;
                 break;
 
             case RIGHT:
                 if (myCoordX < targetX) myCoordX += velocity;
+                else myCoordX = targetX;
                 break;
 
             case UP:
                 if (myCoordY > targetY) myCoordY -= velocity;
+                else myCoordY = targetY;
                 break;
 
             case DOWN:
                 if (myCoordY < targetY) myCoordY += velocity;
+                else myCoordY = targetY;
                 break;
 
             default:
@@ -84,22 +89,6 @@ public class GameBlock extends ImageView {
         }
 
         velocity += acceleration;
-
-//        switch(this.myDirection) {
-//            case LEFT:
-//            case RIGHT:
-//                myCoordX = targetX;
-//                break;
-//
-//            case UP:
-//            case DOWN:
-//                myCoordY = targetY;
-//                break;
-//
-//            default:
-//                // TODO
-//                break;
-//        }
 
         this.setX(myCoordX);
         this.setY(myCoordY);

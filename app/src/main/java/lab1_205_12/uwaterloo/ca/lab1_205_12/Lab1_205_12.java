@@ -18,7 +18,7 @@ import static lab1_205_12.uwaterloo.ca.lab1_205_12.SensorDisplayUtilities.*;
 public class Lab1_205_12 extends AppCompatActivity {
 
     private static final String GESTURE_TITLE = "Gesture:";
-    private static final int FPS = 50;
+    private static final int FPS = 144;
     private static final int GAME_PERIOD = 1000 / FPS;
 
     public static int boundaryMin = -46;
@@ -60,7 +60,7 @@ public class Lab1_205_12 extends AppCompatActivity {
         gestureLabel.setY(boundaryMax);
 
         myLayout.addView(background);
-        myLayout.addView(gestureLabel);
+//        myLayout.addView(gestureLabel);
 
         // timer stuff
         Timer myAnimator = new Timer();

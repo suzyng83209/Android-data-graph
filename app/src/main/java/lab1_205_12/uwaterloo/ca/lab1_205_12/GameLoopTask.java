@@ -31,9 +31,7 @@ public class GameLoopTask extends TimerTask {
     }
 
     private GameBlock createBlock(){
-        GameBlock newBlock = new GameBlock(this.myContext,
-                (boundaryMin + boundaryMax)/2,
-                (boundaryMin + boundaryMax)/2);
+        GameBlock newBlock = new GameBlock(this.myContext, boundaryMin, boundaryMin);
         myRL.addView(newBlock);
         return newBlock;
     }
