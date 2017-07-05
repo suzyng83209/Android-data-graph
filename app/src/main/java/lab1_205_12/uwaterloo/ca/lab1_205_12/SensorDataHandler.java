@@ -98,11 +98,13 @@ public class SensorDataHandler implements SensorEventListener {
                 history[currentIndex][i] = filteredReadings[i];
             }
 
-            //adding graph points and filtering
-            if (graph != null) graph.addPoint(filteredReadings);
-
-            gestureX.analyze(filteredReadings[0]);
-            gestureY.analyze(filteredReadings[1]);
+            if (!gestureX.getInitialSetUp() || !gestureY.getInitialSetUp()) {
+                gestureX.setThresholds(filteredReadings[0]);
+                gestureY.setThresholds(filteredReadings[1]);
+            } else {
+                gestureX.analyze(filteredReadings[0]);
+                gestureY.analyze(filteredReadings[1]);
+            }
 
             if (gestureX.getCurrentState() == VectorState.DETERMINED ||
                     gestureY.getCurrentState() == VectorState.DETERMINED) {

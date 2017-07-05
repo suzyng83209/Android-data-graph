@@ -18,6 +18,7 @@ public class GestureFSM {
 
     private VectorState currentState = WAIT;
     private VectorType type = TYPE_X;
+    private boolean initialSetUp = false;
     private Float previousReading = null;
     private float threshold_A1;
     private float threshold_A2;
@@ -37,17 +38,33 @@ public class GestureFSM {
      * @param threshold_B3 - the third threshold for Type B
      */
     public GestureFSM(float threshold_A1,
-                           float threshold_A2,
-                           float threshold_A3,
-                           float threshold_B1,
-                           float threshold_B2,
-                           float threshold_B3) {
+                      float threshold_A2,
+                      float threshold_A3,
+                      float threshold_B1,
+                      float threshold_B2,
+                      float threshold_B3) {
         this.threshold_A1 = threshold_A1;
         this.threshold_A2 = threshold_A2;
         this.threshold_A3 = threshold_A3;
         this.threshold_B1 = threshold_B1;
         this.threshold_B2 = threshold_B2;
         this.threshold_B3 = threshold_B3;
+    }
+
+    public void setThresholds(float initialValues) {
+        this.threshold_A2 += initialValues;
+        this.threshold_A3 += initialValues;
+        this.threshold_B2 += initialValues;
+        this.threshold_B3 += initialValues;
+        this.initialSetUp = true;
+    }
+
+    public boolean getInitialSetUp() {
+        return this.initialSetUp;
+    }
+
+    public void resetThresholds() {
+        this.initialSetUp = false;
     }
 
     /**

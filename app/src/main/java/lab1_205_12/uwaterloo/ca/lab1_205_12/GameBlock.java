@@ -12,7 +12,7 @@ import static lab1_205_12.uwaterloo.ca.lab1_205_12.Lab1_205_12.boundaryMin;
 
 public class GameBlock extends ImageView {
 
-    private final float IMAGE_SCALE = 0.75f;
+    private final float IMAGE_SCALE = 0.67f;
     private int myCoordX;
     private int myCoordY;
     private int targetX;
