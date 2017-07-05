@@ -41,13 +41,14 @@ public class SensorDisplayUtilities
      * @param sensorType The type of sensor to log data from.
      * @return The newly created and registered sensor data logger.
      */
-    public static SensorDataHandler createSensorDataLogger(SensorManager sensorManager,
-                                                           int dataPoints,
-                                                           int components,
-                                                           int sensorType,
-                                                           GestureFSM gestureX,
-                                                           GestureFSM gestureY,
-                                                           TextView gestureLabel)
+    public static SensorDataHandler createSensorDataHandler(SensorManager sensorManager,
+                                                            int dataPoints,
+                                                            int components,
+                                                            int sensorType,
+                                                            GestureFSM gestureX,
+                                                            GestureFSM gestureY,
+                                                            TextView gestureLabel,
+                                                            GameLoopTask gameLoopTask)
     {
         Sensor sensor = sensorManager.getDefaultSensor(sensorType);
         SensorDataHandler sensorDataHandler = new SensorDataHandler(
@@ -56,7 +57,8 @@ public class SensorDisplayUtilities
                 sensorType,
                 gestureX,
                 gestureY,
-                gestureLabel);
+                gestureLabel,
+                gameLoopTask);
         sensorManager.registerListener(sensorDataHandler, sensor, SensorManager.SENSOR_DELAY_GAME);
         return sensorDataHandler;
     }

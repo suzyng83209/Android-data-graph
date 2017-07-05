@@ -40,6 +40,7 @@ public class SensorDataHandler implements SensorEventListener {
     private GestureFSM gestureX;
     private GestureFSM gestureY;
     private TextView gestureLabel;
+    private GameLoopTask gameLoopTask;
 
     /**
      * Creates a SensorDataHandler that allows the logging and saving of data to
@@ -54,7 +55,8 @@ public class SensorDataHandler implements SensorEventListener {
                              int sensorType,
                              GestureFSM gestureX,
                              GestureFSM gestureY,
-                             TextView gestureLabel)
+                             TextView gestureLabel,
+                             GameLoopTask gameLoopTask)
     {
         DATA_POINTS = dataPoints;
         COMPONENTS = components;
@@ -68,6 +70,7 @@ public class SensorDataHandler implements SensorEventListener {
         this.gestureLabel = gestureLabel;
         this.gestureX = gestureX;
         this.gestureY = gestureY;
+        this.gameLoopTask = gameLoopTask;
     }
 
     public void onAccuracyChanged(Sensor s, int i){}
@@ -108,12 +111,18 @@ public class SensorDataHandler implements SensorEventListener {
 
                 if (xDir == TYPE_B && yDir == TYPE_X) {
                     gestureLabel.setText(LEFT);
+                    gameLoopTask.setDirection(GameDirection.LEFT);
                 } else if (xDir == TYPE_A && yDir == TYPE_X) {
                     gestureLabel.setText(RIGHT);
+                    gameLoopTask.setDirection(GameDirection.RIGHT);
                 } else if (xDir == TYPE_X && yDir == TYPE_A) {
                     gestureLabel.setText(UP);
+                    gameLoopTask.setDirection(GameDirection.UP);
                 } else if (xDir == TYPE_X && yDir == TYPE_B) {
                     gestureLabel.setText(DOWN);
+                    gameLoopTask.setDirection(GameDirection.DOWN);
+                } else {
+                    gameLoopTask.setDirection(GameDirection.NO_MOVEMENT);
                 }
             }
 
