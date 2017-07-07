@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.widget.RelativeLayout;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.TimerTask;
 
 import static lab1_205_12.uwaterloo.ca.lab1_205_12.GameDirection.NO_MOVEMENT;
@@ -19,7 +22,9 @@ public class GameLoopTask extends TimerTask {
     private Activity myActivity;
     private RelativeLayout myRL;
     private Context myContext;
-    private GameBlock gameBlock;
+    private List<GameBlock> gameBlocks;
+    private List<int[]> freeBlocks;
+    private boolean spawnBlock = true;
 
     public GameDirection currentGameDirection = NO_MOVEMENT;
 
@@ -27,33 +32,65 @@ public class GameLoopTask extends TimerTask {
         this.myActivity = myActivity;
         this.myRL = myRL;
         this.myContext = myContext;
-        this.gameBlock = createBlock();
+        this.gameBlocks = new ArrayList<>();
+        this.freeBlocks = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                int blockLength = (boundaryMax - boundaryMin) / 4;
+                freeBlocks.add(new int[]{boundaryMin + blockLength*i, boundaryMin + blockLength*j});
+            }
+        }
     }
 
-    private GameBlock createBlock(){
-        GameBlock newBlock = new GameBlock(this.myContext, boundaryMin, boundaryMin);
-        myRL.addView(newBlock);
-        return newBlock;
+    private void createBlock(){
+        this.spawnBlock = false;
+
+        int coordinatePicker = new Random().nextInt(freeBlocks.size());
+        int[] coordinates = freeBlocks.get(coordinatePicker);
+        GameBlock newBlock = new GameBlock(this.myContext, coordinates);
+
+        this.myRL.addView(newBlock);
+        this.gameBlocks.add(newBlock);
+        this.findFreeBlocks(coordinates);
     }
 
-    private GameBlock createBlock(int coordX, int coordY){
+    private void createBlock(int coordX, int coordY){
         GameBlock newBlock = new GameBlock(this.myContext, coordX, coordY);
-        myRL.addView(newBlock);
-        return newBlock;
+        this.myRL.addView(newBlock);
+        this.gameBlocks.add(newBlock);
+        this.findFreeBlocks(new int[]{coordX, coordY});
+    }
+
+    public int findFreeBlocks(int[] usedCoordinates) {
+        for (int i = 0; i < freeBlocks.size(); i++) {
+            if (freeBlocks.get(i) == usedCoordinates) {
+                freeBlocks.remove(i);
+                return 0;
+            }
+        }
+        return 1;
     }
 
     public void setDirection(GameDirection newDirection) {
         this.currentGameDirection = newDirection;
-        this.gameBlock.setBlockDirection(currentGameDirection);
+        for (GameBlock gameBlock: gameBlocks) {
+            gameBlock.setBlockDirection(currentGameDirection);
+        }
     }
 
     @Override
     public void run() {
-        myActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                gameBlock.move();
+        myActivity.runOnUiThread(() -> {
+            if (this.gameBlocks.size() < 16 && this.spawnBlock) {
+                this.spawnBlock = false;
+                this.createBlock();
             }
+            boolean isMoving = false;
+            for (GameBlock gameBlock : gameBlocks) {
+                gameBlock.move();
+                isMoving = !gameBlock.isMoving();
+            }
+            this.spawnBlock = !isMoving;
         });
     }
 }

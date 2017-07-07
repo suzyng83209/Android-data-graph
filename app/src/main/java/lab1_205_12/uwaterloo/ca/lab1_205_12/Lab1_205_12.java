@@ -20,7 +20,7 @@ public class Lab1_205_12 extends AppCompatActivity {
 
     private static final String GESTURE_TITLE = "Gesture:";
     private static final String BUTTON_TITLE = "RE-ORIENT";
-    private static final int FPS = 60;
+    private static final int FPS = 20;
     private static final int GAME_PERIOD = 1000 / FPS;
 
     public static int boundaryMin = -30;
