@@ -2,11 +2,8 @@ package lab1_205_12.uwaterloo.ca.lab1_205_12;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.Gravity;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Locale;
@@ -22,8 +19,8 @@ import static lab1_205_12.uwaterloo.ca.lab1_205_12.Lab1_205_12.boundaryMin;
 public class GameBlock extends FrameLayout {
 
     private final float IMAGE_SCALE = 0.67f;
-    private int myCoordX;
-    private int myCoordY;
+    private int currentX;
+    private int currentY;
     private int targetX;
     private int targetY;
     private GameDirection myDirection = GameDirection.NO_MOVEMENT;
@@ -43,8 +40,8 @@ public class GameBlock extends FrameLayout {
         this.setX(coordX);
         this.setY(coordY);
 
-        this.myCoordX = coordX;
-        this.myCoordY = coordY;
+        this.currentX = coordX;
+        this.currentY = coordY;
     }
 
     public GameBlock(Context myContext, int[] coordinates) {
@@ -52,10 +49,10 @@ public class GameBlock extends FrameLayout {
         this.setBackgroundResource(R.drawable.gameblock);
         this.setScaleX(IMAGE_SCALE);
         this.setScaleY(IMAGE_SCALE);
-        this.myCoordX = coordinates[0];
-        this.myCoordY = coordinates[1];
-        this.setX(myCoordX);
-        this.setY(myCoordY);
+        this.currentX = coordinates[0];
+        this.currentY = coordinates[1];
+        this.setX(currentX);
+        this.setY(currentY);
 
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -81,20 +78,20 @@ public class GameBlock extends FrameLayout {
     private int[] getTargetCoordinates() {
         switch (this.myDirection) {
             case LEFT:
-                return new int[]{boundaryMin, myCoordY};
+                return new int[]{boundaryMin, currentY};
             case RIGHT:
-                return new int[]{boundaryMax, myCoordY};
+                return new int[]{boundaryMax, currentY};
             case UP:
-                return new int[]{myCoordX, boundaryMin};
+                return new int[]{currentX, boundaryMin};
             case DOWN:
-                return new int[]{myCoordX, boundaryMax};
+                return new int[]{currentX, boundaryMax};
             default:
-                return new int[]{myCoordX, myCoordY};
+                return new int[]{currentX, currentY};
         }
     }
 
     public int[] getCurrentCoordinates() {
-        return new int[]{this.myCoordX, this.myCoordY};
+        return new int[]{this.currentX, this.currentY};
     }
 
     public boolean isMoving() {
@@ -105,45 +102,45 @@ public class GameBlock extends FrameLayout {
 
         switch(this.myDirection) {
             case LEFT:
-                if (myCoordX > targetX) {
-                    myCoordX -= velocity;
+                if (currentX > targetX) {
+                    currentX -= velocity;
                     isMoving = true;
                 }
                 else {
-                    myCoordX = targetX;
+                    currentX = targetX;
                     isMoving = false;
                 }
                 break;
 
             case RIGHT:
-                if (myCoordX < targetX) {
-                    myCoordX += velocity;
+                if (currentX < targetX) {
+                    currentX += velocity;
                     isMoving = true;
                 }
                 else {
-                    myCoordX = targetX;
+                    currentX = targetX;
                     isMoving = false;
                 }
                 break;
 
             case UP:
-                if (myCoordY > targetY) {
-                    myCoordY -= velocity;
+                if (currentY > targetY) {
+                    currentY -= velocity;
                     isMoving = true;
                 }
                 else {
-                    myCoordY = targetY;
+                    currentY = targetY;
                     isMoving = false;
                 }
                 break;
 
             case DOWN:
-                if (myCoordY < targetY) {
-                    myCoordY += velocity;
+                if (currentY < targetY) {
+                    currentY += velocity;
                     isMoving = true;
                 }
                 else {
-                    myCoordY = targetY;
+                    currentY = targetY;
                     isMoving = false;
                 }
                 break;
@@ -155,7 +152,7 @@ public class GameBlock extends FrameLayout {
 
         velocity += acceleration;
 
-        this.setX(myCoordX);
-        this.setY(myCoordY);
+        this.setX(currentX);
+        this.setY(currentY);
     }
 }

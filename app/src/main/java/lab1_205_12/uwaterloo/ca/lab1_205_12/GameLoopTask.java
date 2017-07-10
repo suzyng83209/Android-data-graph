@@ -2,6 +2,7 @@ package lab1_205_12.uwaterloo.ca.lab1_205_12;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
@@ -25,6 +26,8 @@ public class GameLoopTask extends TimerTask {
     private List<GameBlock> gameBlocks;
     private List<int[]> freeBlocks;
     private boolean spawnBlock = true;
+    private boolean isMoving = true;
+    private boolean wasMoving = false;
 
     public GameDirection currentGameDirection = NO_MOVEMENT;
 
@@ -82,15 +85,17 @@ public class GameLoopTask extends TimerTask {
     public void run() {
         myActivity.runOnUiThread(() -> {
             if (this.gameBlocks.size() < 16 && this.spawnBlock) {
-                this.spawnBlock = false;
                 this.createBlock();
             }
-            boolean isMoving = false;
+            wasMoving = isMoving;
+            isMoving = true;
             for (GameBlock gameBlock : gameBlocks) {
                 gameBlock.move();
-                isMoving = !gameBlock.isMoving();
+                if (isMoving) {
+                    isMoving = gameBlock.isMoving();
+                }
             }
-            this.spawnBlock = !isMoving;
+            this.spawnBlock = !isMoving && wasMoving;
         });
     }
 }
