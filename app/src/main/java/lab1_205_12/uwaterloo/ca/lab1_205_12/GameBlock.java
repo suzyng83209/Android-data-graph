@@ -58,7 +58,7 @@ public class GameBlock extends FrameLayout {
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         params.gravity = Gravity.CENTER;
 
-        number = (int) Math.pow(2, new Random().nextInt(10));
+        number = (int) Math.pow(2, new Random().nextInt(2));
         numberValue = new TextView(myContext);
         numberValue.setText(String.format(Locale.CANADA, "%d", number));
         numberValue.setTextColor(Color.BLACK);
@@ -69,25 +69,12 @@ public class GameBlock extends FrameLayout {
 
     public void setBlockDirection(GameDirection newDirection) {
         this.myDirection = newDirection;
-        int[] targetCoordinates = getTargetCoordinates();
-        this.targetX = targetCoordinates[0];
-        this.targetY = targetCoordinates[1];
         this.velocity = initialVelocity;
     }
 
-    private int[] getTargetCoordinates() {
-        switch (this.myDirection) {
-            case LEFT:
-                return new int[]{boundaryMin, currentY};
-            case RIGHT:
-                return new int[]{boundaryMax, currentY};
-            case UP:
-                return new int[]{currentX, boundaryMin};
-            case DOWN:
-                return new int[]{currentX, boundaryMax};
-            default:
-                return new int[]{currentX, currentY};
-        }
+    public void setTargetCoordinates(int[] targetCoordinates) {
+        this.targetX = targetCoordinates[0];
+        this.targetY = targetCoordinates[1];
     }
 
     public int[] getCurrentCoordinates() {

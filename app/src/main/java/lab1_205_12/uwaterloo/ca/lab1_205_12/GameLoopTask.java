@@ -10,7 +10,11 @@ import java.util.List;
 import java.util.Random;
 import java.util.TimerTask;
 
+import static lab1_205_12.uwaterloo.ca.lab1_205_12.GameDirection.DOWN;
+import static lab1_205_12.uwaterloo.ca.lab1_205_12.GameDirection.LEFT;
 import static lab1_205_12.uwaterloo.ca.lab1_205_12.GameDirection.NO_MOVEMENT;
+import static lab1_205_12.uwaterloo.ca.lab1_205_12.GameDirection.RIGHT;
+import static lab1_205_12.uwaterloo.ca.lab1_205_12.GameDirection.UP;
 import static lab1_205_12.uwaterloo.ca.lab1_205_12.Lab1_205_12.boundaryMax;
 import static lab1_205_12.uwaterloo.ca.lab1_205_12.Lab1_205_12.boundaryMin;
 
@@ -23,11 +27,13 @@ public class GameLoopTask extends TimerTask {
     private Activity myActivity;
     private RelativeLayout myRL;
     private Context myContext;
-    private List<GameBlock> gameBlocks;
-    private List<int[]> freeBlocks;
+
     private boolean spawnBlock = true;
     private boolean isMoving = true;
     private boolean wasMoving = false;
+
+    public List<GameBlock> gameBlocks;
+    public List<int[]> freeBlocks;
 
     public GameDirection currentGameDirection = NO_MOVEMENT;
 
@@ -74,10 +80,30 @@ public class GameLoopTask extends TimerTask {
         return 1;
     }
 
+    private int[] getTargetCoordinates(int[] currentCoordinates) {
+        int currentX = currentCoordinates[0];
+        int currentY = currentCoordinates[1];
+
+        switch (this.currentGameDirection) {
+            case LEFT:
+                return new int[]{boundaryMin, currentY};
+            case RIGHT:
+                return new int[]{boundaryMax, currentY};
+            case UP:
+                return new int[]{currentX, boundaryMin};
+            case DOWN:
+                return new int[]{currentX, boundaryMax};
+            default:
+                return new int[]{currentX, currentY};
+        }
+    }
+
     public void setDirection(GameDirection newDirection) {
         this.currentGameDirection = newDirection;
         for (GameBlock gameBlock: gameBlocks) {
-            gameBlock.setBlockDirection(currentGameDirection);
+            int[] targetCoordinates = getTargetCoordinates(gameBlock.getCurrentCoordinates());
+            gameBlock.setBlockDirection(newDirection);
+            gameBlock.setTargetCoordinates(targetCoordinates);
         }
     }
 
