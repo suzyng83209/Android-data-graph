@@ -81,6 +81,14 @@ public class GameBlock extends FrameLayout {
         return new int[]{this.currentX, this.currentY};
     }
 
+    public int getCurrentX() {
+        return this.currentX;
+    }
+
+    public int getCurrentY() {
+        return this.currentY;
+    }
+
     public boolean isMoving() {
         return isMoving;
     }

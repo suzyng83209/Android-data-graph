@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ public class GameLoopTask extends TimerTask {
     private boolean wasMoving = false;
 
     public List<GameBlock> gameBlocks;
-    public List<int[]> freeBlocks;
+    public int blockLength = (boundaryMax - boundaryMin) / 3;
 
     public GameDirection currentGameDirection = NO_MOVEMENT;
 
@@ -42,68 +43,95 @@ public class GameLoopTask extends TimerTask {
         this.myRL = myRL;
         this.myContext = myContext;
         this.gameBlocks = new ArrayList<>();
-        this.freeBlocks = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                int blockLength = (boundaryMax - boundaryMin) / 4;
-                freeBlocks.add(new int[]{boundaryMin + blockLength*i, boundaryMin + blockLength*j});
-            }
-        }
     }
 
     private void createBlock(){
         this.spawnBlock = false;
+        Log.d("game blocks", Integer.toString(gameBlocks.size()));
 
-        int coordinatePicker = new Random().nextInt(freeBlocks.size());
+        List<int[]> freeBlocks = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                int[] freeBlock = {boundaryMin + blockLength*i, boundaryMin + blockLength*j};
+                boolean isFree = true;
+                for (GameBlock gameBlock : gameBlocks) {
+                    if (isFree && gameBlock.getCurrentCoordinates() == freeBlock) {
+                        isFree = false;
+                    }
+                }
+                if (isFree) {
+                    freeBlocks.add(freeBlock);
+                }
+            }
+        }
+
+        int coordinatePicker = new Random().nextInt(16 - gameBlocks.size());
         int[] coordinates = freeBlocks.get(coordinatePicker);
         GameBlock newBlock = new GameBlock(this.myContext, coordinates);
 
         this.myRL.addView(newBlock);
         this.gameBlocks.add(newBlock);
-        this.findFreeBlocks(coordinates);
     }
 
     private void createBlock(int coordX, int coordY){
         GameBlock newBlock = new GameBlock(this.myContext, coordX, coordY);
         this.myRL.addView(newBlock);
         this.gameBlocks.add(newBlock);
-        this.findFreeBlocks(new int[]{coordX, coordY});
-    }
-
-    public int findFreeBlocks(int[] usedCoordinates) {
-        for (int i = 0; i < freeBlocks.size(); i++) {
-            if (freeBlocks.get(i) == usedCoordinates) {
-                freeBlocks.remove(i);
-                return 0;
-            }
-        }
-        return 1;
     }
 
     private int[] getTargetCoordinates(int[] currentCoordinates) {
         int currentX = currentCoordinates[0];
         int currentY = currentCoordinates[1];
 
+        int blocksToLeft = 0;
+        int blocksToRight = 0;
+        int blocksAbove = 0;
+        int blocksBelow = 0;
+        for (GameBlock gameBlock : gameBlocks) {
+            int blockX = gameBlock.getCurrentX();
+            int blockY = gameBlock.getCurrentY();
+            if (blockY == currentY) {
+                if (blockX < currentX) {
+                    blocksToLeft++;
+                } else if (blockX > currentX) {
+                    blocksToRight++;
+                }
+            } else if (blockX == currentX) {
+                if (blockY < currentY) {
+                    blocksAbove++;
+                } else if (blockY > currentY) {
+                    blocksBelow++;
+                }
+            }
+        }
+
+        int leftBound = boundaryMin + blocksToLeft*blockLength;
+        int rightBound = boundaryMax - blocksToRight*blockLength;
+        int upperBound = boundaryMin + blocksAbove*blockLength;
+        int lowerBound = boundaryMax - blocksBelow*blockLength;
+
         switch (this.currentGameDirection) {
             case LEFT:
-                return new int[]{boundaryMin, currentY};
+                return new int[]{leftBound, currentY};
             case RIGHT:
-                return new int[]{boundaryMax, currentY};
+                return new int[]{rightBound, currentY};
             case UP:
-                return new int[]{currentX, boundaryMin};
+                return new int[]{currentX, upperBound};
             case DOWN:
-                return new int[]{currentX, boundaryMax};
+                return new int[]{currentX, lowerBound};
             default:
                 return new int[]{currentX, currentY};
         }
     }
 
     public void setDirection(GameDirection newDirection) {
-        this.currentGameDirection = newDirection;
-        for (GameBlock gameBlock: gameBlocks) {
-            int[] targetCoordinates = getTargetCoordinates(gameBlock.getCurrentCoordinates());
-            gameBlock.setBlockDirection(newDirection);
-            gameBlock.setTargetCoordinates(targetCoordinates);
+        if (!isMoving) {
+            this.currentGameDirection = newDirection;
+            for (GameBlock gameBlock : gameBlocks) {
+                int[] targetCoordinates = getTargetCoordinates(gameBlock.getCurrentCoordinates());
+                gameBlock.setBlockDirection(newDirection);
+                gameBlock.setTargetCoordinates(targetCoordinates);
+            }
         }
     }
 
@@ -115,6 +143,7 @@ public class GameLoopTask extends TimerTask {
             }
             wasMoving = isMoving;
             isMoving = true;
+
             for (GameBlock gameBlock : gameBlocks) {
                 gameBlock.move();
                 if (isMoving) {
