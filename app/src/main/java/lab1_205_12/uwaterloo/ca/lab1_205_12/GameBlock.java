@@ -29,7 +29,7 @@ public class GameBlock extends FrameLayout {
     private int velocity = initialVelocity;
     private int acceleration = 30;
 
-    private TextView numberValue;
+    private TextView numberLabel;
     private int number;
 
     public GameBlock(Context myContext, int coordX, int coordY) {
@@ -58,18 +58,46 @@ public class GameBlock extends FrameLayout {
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         params.gravity = Gravity.CENTER;
 
-        number = (int) Math.pow(2, new Random().nextInt(2));
-        numberValue = new TextView(myContext);
-        numberValue.setText(String.format(Locale.CANADA, "%d", number));
-        numberValue.setTextColor(Color.BLACK);
-        numberValue.setTextSize(48);
-        numberValue.setLayoutParams(params);
-        this.addView(numberValue);
+        number = (int) Math.pow(2, new Random().nextInt(1) + 1);
+        numberLabel = new TextView(myContext);
+        numberLabel.setText(String.format(Locale.CANADA, "%d", number));
+        numberLabel.setTextColor(Color.BLACK);
+        numberLabel.setTextSize(48);
+        numberLabel.setLayoutParams(params);
+        this.addView(numberLabel);
     }
 
-    public void setBlockDirection(GameDirection newDirection) {
+    public void setBlockDirection(GameDirection newDirection, GameBlock blockAhead) {
         this.myDirection = newDirection;
         this.velocity = initialVelocity;
+        boolean canMerge = false;
+
+        if (blockAhead != null) {
+            canMerge = blockAhead.getNumber() == this.number;
+        }
+
+        switch(this.myDirection) {
+            case LEFT:
+                this.targetX = boundaryMin;
+                this.targetY = currentY;
+                break;
+            case RIGHT:
+                this.targetX = boundaryMax;
+                this.targetY = currentY;
+                break;
+            case UP:
+                this.targetX = currentX;
+                this.targetY = boundaryMin;
+                break;
+            case DOWN:
+                this.targetX = currentX;
+                this.targetY = boundaryMin;
+                break;
+            default:
+                this.targetX = currentX;
+                this.targetY = currentY;
+                break;
+        }
     }
 
     public void setTargetCoordinates(int[] targetCoordinates) {
@@ -87,6 +115,10 @@ public class GameBlock extends FrameLayout {
 
     public int getCurrentY() {
         return this.currentY;
+    }
+
+    public int getNumber() {
+        return this.number;
     }
 
     public boolean isMoving() {
