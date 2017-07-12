@@ -124,8 +124,12 @@ public class SensorDataHandler implements SensorEventListener {
                     gestureLabel.setText(DOWN);
                     gameLoopTask.setDirection(GameDirection.DOWN);
                 } else {
+                    gestureLabel.setText("Type N/A");
                     gameLoopTask.setDirection(GameDirection.NO_MOVEMENT);
                 }
+            } else {
+                gestureLabel.setText("N/A");
+                gameLoopTask.setDirection(GameDirection.NO_MOVEMENT);
             }
 
             timeStamps[currentIndex] = se.timestamp;

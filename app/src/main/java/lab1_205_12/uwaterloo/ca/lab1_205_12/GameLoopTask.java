@@ -74,7 +74,7 @@ public class GameLoopTask extends TimerTask {
         freeBlocks.remove(new int[] {coordX, coordY});
     }
 
-    private void setTargetCoordinates(GameBlock currentBlock) {
+    private int[] getTargetCoordinates(GameBlock currentBlock, GameDirection newDirection) {
         int currentX = currentBlock.getCurrentX();
         int currentY = currentBlock.getCurrentY();
 
@@ -83,10 +83,12 @@ public class GameLoopTask extends TimerTask {
         int blocksAbove = 0;
         int blocksBelow = 0;
         for (GameBlock gameBlock : gameBlocks) {
-            if(gameBlock != currentBlock) {
-                int blockX = gameBlock.getCurrentX();
-                int blockY = gameBlock.getCurrentY();
+            int blockX = gameBlock.getCurrentX();
+            int blockY = gameBlock.getCurrentY();
 
+            boolean sameBlock = blockX == currentX && blockY == currentY;
+
+            if(!sameBlock) {
                 if (blockY == currentY) {
                     if (blockX < currentX) {
                         blocksToLeft++;
@@ -109,30 +111,46 @@ public class GameLoopTask extends TimerTask {
 //                + " " + Integer.toString(blocksAbove)
 //                + " " + Integer.toString(blocksBelow));
 
-        switch (this.currentGameDirection) {
+        switch (newDirection) {
             case LEFT:
-                currentBlock.setTargetX(boundaryMin + blocksToLeft*blockLength);
-                break;
+                return new int[] {boundaryMin + blocksToLeft*blockLength, currentY};
             case RIGHT:
-                currentBlock.setTargetX(boundaryMax - blocksToRight*blockLength);
-                break;
+                return new int[] {boundaryMax - blocksToRight*blockLength, currentY};
             case UP:
-                currentBlock.setTargetY(boundaryMin + blocksAbove*blockLength);
-                break;
+                return new int[] {currentX, boundaryMin + blocksAbove*blockLength};
             case DOWN:
-                currentBlock.setTargetY(boundaryMax - blocksBelow*blockLength);
-                break;
+                return new int[] {currentX, boundaryMax - blocksBelow*blockLength};
             default:
-                currentBlock.setTargetCoordinates(currentX, currentY);
+                return new int[] {currentX, currentY};
         }
     }
 
+    private boolean willBlocksMove(GameDirection newDirection) {
+        for (GameBlock gameBlock : gameBlocks) {
+            int[] targetCoordinates = getTargetCoordinates(gameBlock, newDirection);
+            Log.d("coordinates", Integer.toString(targetCoordinates[0])
+                    + " " + Integer.toString(targetCoordinates[1])
+                    + " <= " + Integer.toString(gameBlock.getCurrentX())
+                    + " " + Integer.toString(gameBlock.getCurrentY()));
+
+            if (targetCoordinates[0] != gameBlock.getCurrentX() ||
+                    targetCoordinates[1] != gameBlock.getCurrentY()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void setDirection(GameDirection newDirection) {
+        if (!willBlocksMove(newDirection)) {
+            return;
+        }
         if (!isMoving) {
             this.currentGameDirection = newDirection;
             for (GameBlock gameBlock : gameBlocks) {
+                int[] targetCoordinates = getTargetCoordinates(gameBlock, newDirection);
                 gameBlock.setBlockDirection(newDirection);
-                setTargetCoordinates(gameBlock);
+                gameBlock.setTargetCoordinates(targetCoordinates);
             }
         }
     }

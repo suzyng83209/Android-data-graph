@@ -25,9 +25,9 @@ public class GameBlock extends FrameLayout {
     private int targetY;
     private GameDirection myDirection = GameDirection.NO_MOVEMENT;
     private boolean isMoving = false;
-    private int initialVelocity = 45;
+    private int initialVelocity = 30;
     private int velocity = initialVelocity;
-    private int acceleration = 30;
+    private int acceleration = 20;
 
     private TextView numberValue;
     private int number;
@@ -58,7 +58,7 @@ public class GameBlock extends FrameLayout {
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         params.gravity = Gravity.CENTER;
 
-        number = (int) Math.pow(2, new Random().nextInt(1) + 1);
+        number = (int) Math.pow(2, new Random().nextInt(2) + 1);
         numberValue = new TextView(myContext);
         numberValue.setText(String.format(Locale.CANADA, "%d", number));
         numberValue.setTextColor(Color.BLACK);
@@ -108,8 +108,12 @@ public class GameBlock extends FrameLayout {
         return this.number;
     }
 
+    public GameDirection getMyDirection() {
+        return this.myDirection;
+    }
+
     public boolean isMoving() {
-        return isMoving;
+        return currentX != targetX || currentY != targetY;
     }
 
     public void move() {
@@ -118,44 +122,36 @@ public class GameBlock extends FrameLayout {
             case LEFT:
                 if (currentX > targetX) {
                     currentX -= velocity;
-                    isMoving = true;
                 }
                 else {
                     currentX = targetX;
-                    isMoving = false;
                 }
                 break;
 
             case RIGHT:
                 if (currentX < targetX) {
                     currentX += velocity;
-                    isMoving = true;
                 }
                 else {
                     currentX = targetX;
-                    isMoving = false;
                 }
                 break;
 
             case UP:
                 if (currentY > targetY) {
                     currentY -= velocity;
-                    isMoving = true;
                 }
                 else {
                     currentY = targetY;
-                    isMoving = false;
                 }
                 break;
 
             case DOWN:
                 if (currentY < targetY) {
                     currentY += velocity;
-                    isMoving = true;
                 }
                 else {
                     currentY = targetY;
-                    isMoving = false;
                 }
                 break;
 
