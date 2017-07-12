@@ -32,9 +32,10 @@ public class GameLoopTask extends TimerTask {
     private boolean spawnBlock = true;
     private boolean isMoving = false;
     private boolean wasMoving = false;
+    private boolean justSpawned = false;
 
     private List<GameBlock> gameBlocks;
-    private List<int[]> freeBlocks;
+    private int[][] gameBoard;
     public int blockLength = (boundaryMax - boundaryMin) / 3;
 
     public GameDirection currentGameDirection = NO_MOVEMENT;
@@ -44,11 +45,10 @@ public class GameLoopTask extends TimerTask {
         this.myRL = myRL;
         this.myContext = myContext;
         this.gameBlocks = new ArrayList<>();
-        this.freeBlocks = new ArrayList<>();
+        this.gameBoard = new int[4][4];
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                int[] coordinates = new int[] {boundaryMin + blockLength*i, boundaryMin + blockLength*j};
-                freeBlocks.add(coordinates);
+                gameBoard[i][j] = 0;
             }
         }
         createBlock();
@@ -57,21 +57,35 @@ public class GameLoopTask extends TimerTask {
     private void createBlock(){
         this.spawnBlock = false;
 
-        int coordinatePicker = new Random().nextInt(16 - gameBlocks.size());
-        int[] coordinates = freeBlocks.get(coordinatePicker);
-        freeBlocks.remove(coordinatePicker);
+        Random random = new Random();
 
-        GameBlock newBlock = new GameBlock(this.myContext, coordinates);
+        int rowNum = random.nextInt(3);
+        int columnNum = random.nextInt(3);
+
+        while (gameBoard[rowNum][columnNum] != 0) {
+            rowNum = random.nextInt(3);
+            columnNum = random.nextInt(3);
+        }
+
+        int coordX = boundaryMin + rowNum*blockLength;
+        int coordY = boundaryMax + columnNum*blockLength;
+
+        GameBlock newBlock = new GameBlock(this.myContext, coordX, coordY);
+        gameBoard[rowNum][columnNum] = newBlock.getNumber();
 
         this.gameBlocks.add(newBlock);
         this.myRL.addView(newBlock);
+        this.justSpawned = true;
+    }
+
+    private int getGridNum(int coordinate) {
+        boundaryMax - bou
     }
 
     private void createBlock(int coordX, int coordY){
         GameBlock newBlock = new GameBlock(this.myContext, coordX, coordY);
         this.myRL.addView(newBlock);
         this.gameBlocks.add(newBlock);
-        freeBlocks.remove(new int[] {coordX, coordY});
     }
 
     private int[] getTargetCoordinates(GameBlock currentBlock, GameDirection newDirection) {
@@ -142,11 +156,12 @@ public class GameLoopTask extends TimerTask {
     }
 
     public void setDirection(GameDirection newDirection) {
-        if (!willBlocksMove(newDirection)) {
-            return;
-        }
-        if (!isMoving) {
-            this.currentGameDirection = newDirection;
+
+        this.justSpawned = currentGameDirection != NO_MOVEMENT && newDirection == NO_MOVEMENT;
+
+        this.currentGameDirection = newDirection;
+
+        if (!isMoving && !justSpawned) {
             for (GameBlock gameBlock : gameBlocks) {
                 int[] targetCoordinates = getTargetCoordinates(gameBlock, newDirection);
                 gameBlock.setBlockDirection(newDirection);
