@@ -58,7 +58,7 @@ public class GameBlock extends FrameLayout {
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         params.gravity = Gravity.CENTER;
 
-        number = (int) Math.pow(2, new Random().nextInt(2));
+        number = (int) Math.pow(2, new Random().nextInt(1) + 1);
         numberValue = new TextView(myContext);
         numberValue.setText(String.format(Locale.CANADA, "%d", number));
         numberValue.setTextColor(Color.BLACK);
@@ -77,6 +77,21 @@ public class GameBlock extends FrameLayout {
         this.targetY = targetCoordinates[1];
     }
 
+    public void setTargetCoordinates(int targetX, int targetY) {
+        this.targetX = targetX;
+        this.targetY = targetY;
+    }
+
+    public void setTargetX(int targetX) {
+        this.targetX = targetX;
+        this.targetY = currentY;
+    }
+
+    public void setTargetY(int targetY) {
+        this.targetY = targetY;
+        this.targetX = currentX;
+    }
+
     public int[] getCurrentCoordinates() {
         return new int[]{this.currentX, this.currentY};
     }
@@ -87,6 +102,10 @@ public class GameBlock extends FrameLayout {
 
     public int getCurrentY() {
         return this.currentY;
+    }
+
+    public int getNumber() {
+        return this.number;
     }
 
     public boolean isMoving() {
