@@ -30,7 +30,7 @@ public class GameLoopTask extends TimerTask {
     private Context myContext;
 
     private boolean spawnBlock = true;
-    private boolean isMoving = true;
+    private boolean isMoving = false;
     private boolean wasMoving = false;
 
     public List<GameBlock> gameBlocks;
@@ -142,14 +142,15 @@ public class GameLoopTask extends TimerTask {
                 this.createBlock();
             }
             wasMoving = isMoving;
-            isMoving = true;
+            isMoving = false;
 
             for (GameBlock gameBlock : gameBlocks) {
                 gameBlock.move();
-                if (isMoving) {
-                    isMoving = gameBlock.isMoving();
+                if (gameBlock.isMoving()) {
+                    isMoving = true;
                 }
             }
+
             this.spawnBlock = !isMoving && wasMoving;
         });
     }
