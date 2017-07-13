@@ -7,6 +7,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 import java.util.TimerTask;
@@ -34,6 +36,7 @@ public class GameLoopTask extends TimerTask {
     private boolean wasMoving = false;
 
     private List<GameBlock> gameBlocks;
+    private List<GameBlock> deleteBlocks;
     private List<int[]> freeBlocks;
     public int blockLength = (boundaryMax - boundaryMin) / 3;
 
@@ -43,7 +46,10 @@ public class GameLoopTask extends TimerTask {
         this.myActivity = myActivity;
         this.myRL = myRL;
         this.myContext = myContext;
+
+
         this.gameBlocks = new ArrayList<>();
+        this.deleteBlocks = new ArrayList<>();
         this.freeBlocks = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
@@ -78,10 +84,11 @@ public class GameLoopTask extends TimerTask {
         int currentX = currentBlock.getCurrentX();
         int currentY = currentBlock.getCurrentY();
 
-        int blocksToLeft = 0;
-        int blocksToRight = 0;
-        int blocksAbove = 0;
-        int blocksBelow = 0;
+        List<GameBlock> blocksToLeft = new ArrayList<>();
+        List<GameBlock> blocksToRight = new ArrayList<>();
+        List<GameBlock> blocksAbove = new ArrayList<>();
+        List<GameBlock> blocksBelow = new ArrayList<>();
+
         for (GameBlock gameBlock : gameBlocks) {
             int blockX = gameBlock.getCurrentX();
             int blockY = gameBlock.getCurrentY();
@@ -91,35 +98,85 @@ public class GameLoopTask extends TimerTask {
             if(!sameBlock) {
                 if (blockY == currentY) {
                     if (blockX < currentX) {
-                        blocksToLeft++;
+                        blocksToLeft.add(gameBlock);
                     } else {
-                        blocksToRight++;
+                        blocksToRight.add(gameBlock);
                     }
                 } else if (blockX == currentX) {
                     if (blockY < currentY) {
-                        blocksAbove++;
+                        blocksAbove.add(gameBlock);
                     } else {
-                        blocksBelow++;
+                        blocksBelow.add(gameBlock);
                     }
                 }
             }
         }
 
-//        Log.d("blocks", currentBlock.getNumber()
-//                + " " + Integer.toString(blocksToLeft)
-//                + " " + Integer.toString(blocksToRight)
-//                + " " + Integer.toString(blocksAbove)
-//                + " " + Integer.toString(blocksBelow));
-
         switch (newDirection) {
             case LEFT:
-                return new int[] {boundaryMin + blocksToLeft*blockLength, currentY};
+                Collections.sort(blocksToLeft, new Comparator<GameBlock>() {
+                    @Override
+                    public int compare(GameBlock block1, GameBlock block2) {
+                        Integer distance1 = currentX - block1.getCurrentX();
+                        Integer distance2 = currentX - block2.getCurrentX();
+                        return distance1.compareTo(distance2);
+                    }
+                });
+                GameBlock leftBlock = blocksToLeft.get(0);
+                if (leftBlock.getNumber() == currentBlock.getNumber()) {
+                    blocksToLeft.remove(leftBlock);
+                    gameBlocks.remove(leftBlock);
+                    currentBlock.increaseNumber();
+                }
+                return new int[] {boundaryMin + blocksToLeft.size()*blockLength, currentY};
             case RIGHT:
-                return new int[] {boundaryMax - blocksToRight*blockLength, currentY};
+                Collections.sort(blocksToRight, new Comparator<GameBlock>() {
+                    @Override
+                    public int compare(GameBlock block1, GameBlock block2) {
+                        Integer distance1 = block1.getCurrentX() - currentX;
+                        Integer distance2 = block2.getCurrentX() - currentX;
+                        return distance1.compareTo(distance2);
+                    }
+                });
+                GameBlock rightBlock = blocksToRight.get(0);
+                if (rightBlock.getNumber() == currentBlock.getNumber()) {
+                    blocksToRight.remove(rightBlock);
+                    gameBlocks.remove(rightBlock);
+                    currentBlock.increaseNumber();
+                }
+                return new int[] {boundaryMax - blocksToRight.size()*blockLength, currentY};
             case UP:
-                return new int[] {currentX, boundaryMin + blocksAbove*blockLength};
+                Collections.sort(blocksAbove, new Comparator<GameBlock>() {
+                    @Override
+                    public int compare(GameBlock block1, GameBlock block2) {
+                        Integer distance1 = currentY - block1.getCurrentY();
+                        Integer distance2 = currentY - block2.getCurrentY();
+                        return distance1.compareTo(distance2);
+                    }
+                });
+                GameBlock aboveBlock = blocksAbove.get(0);
+                if (aboveBlock.getNumber() == currentBlock.getNumber()) {
+                    blocksAbove.remove(aboveBlock);
+                    gameBlocks.remove(aboveBlock);
+                    currentBlock.increaseNumber();
+                }
+                return new int[] {currentX, boundaryMin + blocksAbove.size()*blockLength};
             case DOWN:
-                return new int[] {currentX, boundaryMax - blocksBelow*blockLength};
+                Collections.sort(blocksBelow, new Comparator<GameBlock>() {
+                    @Override
+                    public int compare(GameBlock block1, GameBlock block2) {
+                        Integer distance1 = block1.getCurrentY() - currentY;
+                        Integer distance2 = block2.getCurrentY() - currentY;
+                        return distance1.compareTo(distance2);
+                    }
+                });
+                GameBlock belowBlock = blocksBelow.get(0);
+                if (belowBlock.getNumber() == currentBlock.getNumber()) {
+                    blocksAbove.remove(belowBlock);
+                    gameBlocks.remove(belowBlock);
+                    currentBlock.increaseNumber();
+                }
+                return new int[] {currentX, boundaryMax - blocksBelow.size()*blockLength};
             default:
                 return new int[] {currentX, currentY};
         }

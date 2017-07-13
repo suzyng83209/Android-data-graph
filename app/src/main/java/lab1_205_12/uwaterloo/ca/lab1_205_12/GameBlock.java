@@ -92,6 +92,10 @@ public class GameBlock extends FrameLayout {
         this.targetX = currentX;
     }
 
+    public void increaseNumber() {
+        this.number *= 2;
+    }
+
     public int[] getCurrentCoordinates() {
         return new int[]{this.currentX, this.currentY};
     }
